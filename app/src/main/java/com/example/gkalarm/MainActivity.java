@@ -16,6 +16,8 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements TimeSelectFragment.OnTimeSelectedListener {
 
+    public static final String EXTRA_ALARM_ON = "EXTRA_ALARM_ON";
+
     AlarmManager alarmMgr;
     Intent alarmIntent;
     PendingIntent pendingAlarmIntent;
