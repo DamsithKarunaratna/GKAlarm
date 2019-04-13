@@ -39,7 +39,7 @@ public class AlarmData {
                 "alarm 3", 1555154400000L));
     }
 
-    private static void addItem(AlarmItem item) {
+    public static void addItem(AlarmItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(String.valueOf(item.id), item);
     }

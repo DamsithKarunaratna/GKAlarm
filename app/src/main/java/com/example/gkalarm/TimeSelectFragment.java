@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
@@ -39,6 +40,7 @@ public class TimeSelectFragment extends DialogFragment implements AdapterView.On
     public static final int ALARM_BOMB_SIREN = 2;
     public static final int ALARM_SCHOOL_BELL = 3;
 
+    EditText etAlarmName;
     Button doneButton;
     TimePicker timePicker;
     OnTimeSelectedListener listener;
@@ -60,6 +62,7 @@ public class TimeSelectFragment extends DialogFragment implements AdapterView.On
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_time_select, container, false);
 
+        etAlarmName = view.findViewById(R.id.et_alarm_name);
         doneButton = view.findViewById(R.id.set_alarm_button);
         timePicker = view.findViewById(R.id.time_picker);
         spinner = view.findViewById(R.id.tone_spinner);
@@ -90,7 +93,7 @@ public class TimeSelectFragment extends DialogFragment implements AdapterView.On
                 }
 
                 // Notify the listener
-                listener.onTimePicked(hour, minute, alarmType);
+                listener.onTimePicked(hour, minute, alarmType, etAlarmName.getText().toString());
                 dismiss();
             }
         });
@@ -152,6 +155,6 @@ public class TimeSelectFragment extends DialogFragment implements AdapterView.On
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnTimeSelectedListener {
-        void onTimePicked(int hour, int minute, int alarmType);
+        void onTimePicked(int hour, int minute, int alarmType, String alarmName);
     }
 }

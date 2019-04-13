@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity
 
     public static final String EXTRA_ALARM_ON = "EXTRA_ALARM_ON";
     public static final String EXTRA_ALARM_TYPE = "EXTRA_ALARM_TYPE";
+    public static final String EXTRA_ALARM_NAME = "EXTRA_ALARM_NAME";
 
     AlarmManager alarmMgr;
     Intent alarmIntent;
@@ -69,9 +70,11 @@ public class MainActivity extends AppCompatActivity
      * @param minute minute passed from TimeSelectFragment
      */
     @Override
-    public void onTimePicked(int hour, int minute, int alarmType) {
+    public void onTimePicked(int hour, int minute, int alarmType, String alarmName) {
 
         Log.i("alarmApp", "ONTIMEPICKED() called");
+
+        String timeString = hour + ":" + minute;
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, hour);
@@ -80,19 +83,30 @@ public class MainActivity extends AppCompatActivity
         // Intent Extra which tells the Service which operation to carry out
         alarmIntent.putExtra(EXTRA_ALARM_ON, true);
         alarmIntent.putExtra(EXTRA_ALARM_TYPE, alarmType);
+        alarmIntent.putExtra(EXTRA_ALARM_NAME, alarmName);
 
         pendingAlarmIntent = PendingIntent.getBroadcast(MainActivity.this,
-                0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             alarmMgr.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() - 30000, pendingAlarmIntent);
         } else {
             alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingAlarmIntent);
         }
+
+        // id time name mili
+        AlarmData.AlarmItem alarmItem = new AlarmData.AlarmItem(
+                AlarmData.ITEMS.size() + 1,
+                timeString,
+                alarmName,
+                calendar.getTimeInMillis());
+
+        AlarmData.addItem(alarmItem);
+        AlarmListFragment.alarmRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     /**
-     * Show a custom DialogFragment with a Timepicker, EditText for alarm name and Tone selector
+     * Show a custom DialogFragment with a TimePicker, EditText for alarm name and Tone selector
      *
      * See <a href=
      * "https://medium.com/@xabaras/creating-a-custom-dialog-with-dialogfragment-f0198dab656d"

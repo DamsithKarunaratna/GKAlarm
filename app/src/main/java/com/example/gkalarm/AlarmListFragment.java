@@ -25,6 +25,7 @@ public class AlarmListFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    public static AlarmRecyclerViewAdapter alarmRecyclerViewAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -57,6 +58,7 @@ public class AlarmListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_alarm_list, container, false);
+        alarmRecyclerViewAdapter = new AlarmRecyclerViewAdapter(AlarmData.ITEMS, mListener);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -67,7 +69,7 @@ public class AlarmListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new AlarmRecyclerViewAdapter(AlarmData.ITEMS, mListener));
+            recyclerView.setAdapter(alarmRecyclerViewAdapter);
         }
         return view;
     }
