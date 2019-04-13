@@ -9,5 +9,6 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".AlarmFragment"
-    tools:listitem="@layout/fragment_alarm" />
+    tools:context=".AlarmListFragment"
+    tools:listitem="@layout/fragment_alarm_item"
+    android:background="@android:color/darker_gray"/>

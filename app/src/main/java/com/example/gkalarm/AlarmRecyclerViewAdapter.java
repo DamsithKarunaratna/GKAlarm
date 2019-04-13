@@ -6,38 +6,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.gkalarm.AlarmFragment.OnListFragmentInteractionListener;
-import com.example.gkalarm.data.DummyContent.DummyItem;
+import com.example.gkalarm.AlarmListFragment.OnListFragmentInteractionListener;
+import com.example.gkalarm.data.AlarmData.AlarmItem;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link AlarmItem} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
  */
-public class AlarmRecyclerViewAdapter extends RecyclerView.Adapter<AlarmRecyclerViewAdapter.ViewHolder> {
+public class AlarmRecyclerViewAdapter extends RecyclerView.Adapter<AlarmRecyclerViewAdapter.AlarmItemViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<AlarmItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public AlarmRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public AlarmRecyclerViewAdapter(List<AlarmItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AlarmItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_alarm, parent, false);
-        return new ViewHolder(view);
+                .inflate(R.layout.fragment_alarm_item, parent, false);
+        return new AlarmItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final AlarmItemViewHolder holder, int position) {
+
+        AlarmItem currentItem = mValues.get(position);
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(String.valueOf(currentItem.id));
+        holder.mNameView.setText(currentItem.alarmName);
+        holder.mTimeView.setText(currentItem.alarmTime);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,22 +58,25 @@ public class AlarmRecyclerViewAdapter extends RecyclerView.Adapter<AlarmRecycler
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class AlarmItemViewHolder  extends RecyclerView.ViewHolder {
+
         public final View mView;
         public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView mNameView;
+        public final TextView mTimeView;
+        public AlarmItem mItem;
 
-        public ViewHolder(View view) {
+        public AlarmItemViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.tv_alarm_id);
+            mNameView = (TextView) view.findViewById(R.id.tv_alarm_name);
+            mTimeView = (TextView) view.findViewById(R.id.tv_alarm_time);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mNameView.getText() + "'";
         }
     }
 }

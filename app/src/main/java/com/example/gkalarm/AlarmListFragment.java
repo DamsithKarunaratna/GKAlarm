@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.gkalarm.data.DummyContent;
-import com.example.gkalarm.data.DummyContent.DummyItem;
+import com.example.gkalarm.data.AlarmData;
+import com.example.gkalarm.data.AlarmData.AlarmItem;
 
 /**
  * A fragment representing a list of Items.
@@ -19,11 +19,10 @@ import com.example.gkalarm.data.DummyContent.DummyItem;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class AlarmFragment extends Fragment {
+public class AlarmListFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
+    // boilerplate
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
@@ -31,13 +30,13 @@ public class AlarmFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public AlarmFragment() {
+    public AlarmListFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static AlarmFragment newInstance(int columnCount) {
-        AlarmFragment fragment = new AlarmFragment();
+    public static AlarmListFragment newInstance(int columnCount) {
+        AlarmListFragment fragment = new AlarmListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -56,6 +55,7 @@ public class AlarmFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_alarm_list, container, false);
 
         // Set the adapter
@@ -67,7 +67,7 @@ public class AlarmFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new AlarmRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new AlarmRecyclerViewAdapter(AlarmData.ITEMS, mListener));
         }
         return view;
     }
@@ -102,6 +102,6 @@ public class AlarmFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(AlarmItem item);
     }
 }

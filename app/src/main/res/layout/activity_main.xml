@@ -12,9 +12,10 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.example.gkalarm.AlarmFragment"
+        android:name="com.example.gkalarm.AlarmListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"/>
 
 
 </RelativeLayout>

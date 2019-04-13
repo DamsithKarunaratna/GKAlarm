@@ -14,13 +14,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.gkalarm.data.DummyContent;
+import com.example.gkalarm.data.AlarmData;
 
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity
         implements TimeSelectFragment.OnTimeSelectedListener,
-        AlarmFragment.OnListFragmentInteractionListener {
+        AlarmListFragment.OnListFragmentInteractionListener {
 
     public static final String EXTRA_ALARM_ON = "EXTRA_ALARM_ON";
     public static final String EXTRA_ALARM_TYPE = "EXTRA_ALARM_TYPE";
@@ -110,7 +110,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(AlarmData.AlarmItem item) {
         Log.i("alarmApp", "List item interaction");
+        Log.i("alarmApp", item.toString());
     }
 }
