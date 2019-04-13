@@ -10,10 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.gkalarm.dummy.DummyContent;
-import com.example.gkalarm.dummy.DummyContent.DummyItem;
-
-import java.util.List;
+import com.example.gkalarm.data.DummyContent;
+import com.example.gkalarm.data.DummyContent.DummyItem;
 
 /**
  * A fragment representing a list of Items.

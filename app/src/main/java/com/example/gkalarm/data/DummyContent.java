@@ -1,4 +1,4 @@
-package com.example.gkalarm.dummy;
+package com.example.gkalarm.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;

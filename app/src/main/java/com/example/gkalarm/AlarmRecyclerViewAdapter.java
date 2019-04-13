@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.gkalarm.AlarmFragment.OnListFragmentInteractionListener;
-import com.example.gkalarm.dummy.DummyContent.DummyItem;
+import com.example.gkalarm.data.DummyContent.DummyItem;
 
 import java.util.List;
 

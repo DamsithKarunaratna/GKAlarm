@@ -14,7 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.gkalarm.dummy.DummyContent;
+import com.example.gkalarm.data.DummyContent;
 
 import java.util.Calendar;
 
