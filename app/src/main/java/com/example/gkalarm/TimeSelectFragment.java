@@ -34,7 +34,6 @@ public class TimeSelectFragment extends DialogFragment {
     TimePicker timePicker;
     OnTimeSelectedListener listener;
 
-
     public TimeSelectFragment() {
         // Required empty public constructor
     }
