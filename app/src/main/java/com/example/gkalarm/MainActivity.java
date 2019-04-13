@@ -14,9 +14,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.gkalarm.dummy.DummyContent;
+
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements TimeSelectFragment.OnTimeSelectedListener {
+public class MainActivity extends AppCompatActivity
+        implements TimeSelectFragment.OnTimeSelectedListener,
+        AlarmFragment.OnListFragmentInteractionListener {
 
     public static final String EXTRA_ALARM_ON = "EXTRA_ALARM_ON";
     public static final String EXTRA_ALARM_TYPE = "EXTRA_ALARM_TYPE";
@@ -103,5 +107,10 @@ public class MainActivity extends AppCompatActivity implements TimeSelectFragmen
         ft.addToBackStack(null);
         DialogFragment dialogFragment = new TimeSelectFragment();
         dialogFragment.show(ft, "timePickerDialog");
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+        Log.i("alarmApp", "List item interaction");
     }
 }
