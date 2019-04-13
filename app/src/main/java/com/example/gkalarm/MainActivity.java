@@ -19,6 +19,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements TimeSelectFragment.OnTimeSelectedListener {
 
     public static final String EXTRA_ALARM_ON = "EXTRA_ALARM_ON";
+    public static final String EXTRA_ALARM_TYPE = "EXTRA_ALARM_TYPE";
 
     AlarmManager alarmMgr;
     Intent alarmIntent;
@@ -64,7 +65,8 @@ public class MainActivity extends AppCompatActivity implements TimeSelectFragmen
      * @param minute minute passed from TimeSelectFragment
      */
     @Override
-    public void onTimePicked(int hour, int minute) {
+    public void onTimePicked(int hour, int minute, int alarmType) {
+
         Log.i("alarmApp", "ONTIMEPICKED() called");
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -73,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements TimeSelectFragmen
 
         // Intent Extra which tells the Service which operation to carry out
         alarmIntent.putExtra(EXTRA_ALARM_ON, true);
+        alarmIntent.putExtra(EXTRA_ALARM_TYPE, alarmType);
+
         pendingAlarmIntent = PendingIntent.getBroadcast(MainActivity.this,
                 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 

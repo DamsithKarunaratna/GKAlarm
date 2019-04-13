@@ -15,6 +15,13 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import static com.example.gkalarm.MainActivity.EXTRA_ALARM_ON;
+import static com.example.gkalarm.MainActivity.EXTRA_ALARM_TYPE;
+import static com.example.gkalarm.TimeSelectFragment.ALARM_ALIEN;
+import static com.example.gkalarm.TimeSelectFragment.ALARM_BOMB_SIREN;
+import static com.example.gkalarm.TimeSelectFragment.ALARM_SCHOOL_BELL;
+import static com.example.gkalarm.TimeSelectFragment.ALARM_WATCH;
+
 /**
  * @author Damsith Karunaratna
  *
@@ -33,13 +40,13 @@ import android.util.Log;
  */
 public class AlarmToneService extends Service {
 
-    String EXTRA_ALARM_ON = MainActivity.EXTRA_ALARM_ON;
     String CHANNEL_ID = "NOTIFICATION_CHANNEL_ID";
     NotificationCompat.Builder notificationBuilder;
     MediaPlayer mediaPlayer;
     Intent questionActivityIntent;
     PendingIntent pendingNotificationIntent;
     boolean alarmOn;
+    int alarmType;
 
     @Nullable
     @Override
@@ -71,8 +78,23 @@ public class AlarmToneService extends Service {
 
         // Check the type of message received from MainActivity and act accordingly
         alarmOn = intent.getExtras().getBoolean(EXTRA_ALARM_ON);
+        alarmType = intent.getExtras().getInt(EXTRA_ALARM_TYPE);
+
         if (alarmOn) {
-            mediaPlayer = MediaPlayer.create(this, R.raw.analog_watch_alarm);
+            switch (alarmType) {
+                case ALARM_ALIEN:
+                    mediaPlayer = MediaPlayer.create(this, R.raw.alien_siren);
+                    break;
+                case ALARM_BOMB_SIREN:
+                    mediaPlayer = MediaPlayer.create(this, R.raw.bomb_siren);
+                    break;
+                case ALARM_SCHOOL_BELL:
+                    mediaPlayer = MediaPlayer.create(this, R.raw.old_fashioned_school_bell);
+                    break;
+                case ALARM_WATCH:
+                    mediaPlayer = MediaPlayer.create(this, R.raw.analog_watch_alarm);
+                    break;
+            }
             mediaPlayer.start();
             Log.i("alarmApp", "Received intent - Alarm On : " + alarmOn);
         } else {
