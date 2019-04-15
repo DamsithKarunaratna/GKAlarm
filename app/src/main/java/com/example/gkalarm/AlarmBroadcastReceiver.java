@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
@@ -18,7 +19,9 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         serviceIntent.putExtra(MainActivity.EXTRA_ALARM_TYPE,
                 intent.getExtras().getInt(MainActivity.EXTRA_ALARM_TYPE));
         serviceIntent.putExtra(MainActivity.EXTRA_ALARM_NAME,
-                intent.getExtras().getInt(MainActivity.EXTRA_ALARM_NAME));
+                intent.getExtras().getString(MainActivity.EXTRA_ALARM_NAME));
+        serviceIntent.putExtra(MainActivity.EXTRA_ALARM_ID,
+                intent.getExtras().getInt(MainActivity.EXTRA_ALARM_ID));
 
         // Start AlarmToneService
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

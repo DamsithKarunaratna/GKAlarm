@@ -4,16 +4,23 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Persistence for arrays in shared preferences
  * See <a href="https://stackoverflow.com/a/7361989">SO answer</a>
  */
 public class Persistence {
+
+    public static final String KEY_ALARM_ARRAY = "com.example.gkalarm.data.KEY_ALARM_ARRAY";
+    public static final String SHARED_PREF_FILE = "com.example.gkalarm.data.SHARED_PREF_FILE";
 
     public Persistence() {
     }
@@ -49,5 +56,35 @@ public class Persistence {
             }
         }
         return urls;
+    }
+
+    public static String storeListInSharedPreferences(Context context, List<AlarmData.AlarmItem> list) {
+
+        SharedPreferences sharedPreferences;
+        SharedPreferences.Editor editor;
+        sharedPreferences = context.getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+
+        editor = sharedPreferences.edit();
+        editor.remove(KEY_ALARM_ARRAY).commit();
+        editor.putString(KEY_ALARM_ARRAY, json);
+        editor.commit();
+
+        return json;
+    }
+
+    public static ArrayList<AlarmData.AlarmItem> getListFromSharedPreferences(Context context) {
+
+        SharedPreferences sharedPreferences;
+        sharedPreferences = context.getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String response=sharedPreferences.getString(KEY_ALARM_ARRAY , "");
+        ArrayList<AlarmData.AlarmItem> alarmItemArrayList = gson.fromJson(response,
+                new TypeToken<List<AlarmData.AlarmItem>>(){}.getType());
+
+        return alarmItemArrayList;
     }
 }

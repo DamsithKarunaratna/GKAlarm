@@ -15,6 +15,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import static com.example.gkalarm.MainActivity.EXTRA_ALARM_ID;
 import static com.example.gkalarm.MainActivity.EXTRA_ALARM_NAME;
 import static com.example.gkalarm.MainActivity.EXTRA_ALARM_ON;
 import static com.example.gkalarm.MainActivity.EXTRA_ALARM_TYPE;
@@ -60,9 +61,12 @@ public class AlarmToneService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         String alarmName = intent.getExtras().getString(EXTRA_ALARM_NAME);
+        int alarmId = intent.getExtras().getInt(EXTRA_ALARM_ID);
 
         // Tapping the notification will open the QuestionActivity.
         questionActivityIntent = new Intent(this, QuestionActivity.class);
+        questionActivityIntent.putExtra(EXTRA_ALARM_NAME, alarmName);
+        questionActivityIntent.putExtra(EXTRA_ALARM_ID, alarmId);
         pendingNotificationIntent = getPendingIntentWithBackStack(questionActivityIntent);
 
         //Notification channel is required in versions after Android Oreo

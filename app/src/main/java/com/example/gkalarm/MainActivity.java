@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.gkalarm.data.AlarmData;
+import com.example.gkalarm.data.Persistence;
 
 import java.util.Calendar;
 
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity
     public static final String EXTRA_ALARM_ON = "EXTRA_ALARM_ON";
     public static final String EXTRA_ALARM_TYPE = "EXTRA_ALARM_TYPE";
     public static final String EXTRA_ALARM_NAME = "EXTRA_ALARM_NAME";
+    public static final String EXTRA_ALARM_ID = "EXTRA_ALARM_ID";
 
     AlarmManager alarmMgr;
     Intent alarmIntent;
@@ -43,6 +45,10 @@ public class MainActivity extends AppCompatActivity
         alarmIntent = new Intent(MainActivity.this, AlarmBroadcastReceiver.class);
         pendingAlarmIntent = PendingIntent.getBroadcast(MainActivity.this,
                 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmData.addAll(Persistence.getListFromSharedPreferences(getApplicationContext()));
+        AlarmListFragment.alarmRecyclerViewAdapter.notifyDataSetChanged();
+
 
     }
 
@@ -75,24 +81,30 @@ public class MainActivity extends AppCompatActivity
         Log.i("alarmApp", "ONTIMEPICKED() called");
 
         String timeString = hour + ":" + minute;
+        int alarmId = AlarmData.ITEMS.size() + 1;
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
 
-        // Intent Extra which tells the Service which operation to carry out
-        alarmIntent.putExtra(EXTRA_ALARM_ON, true);
-        alarmIntent.putExtra(EXTRA_ALARM_TYPE, alarmType);
-        alarmIntent.putExtra(EXTRA_ALARM_NAME, alarmName);
-
         AlarmData.AlarmItem alarmItem = new AlarmData.AlarmItem(
-                AlarmData.ITEMS.size() + 1,
+                alarmId,
                 timeString,
                 alarmName,
                 calendar.getTimeInMillis());
 
         AlarmData.addItem(alarmItem);
-        AlarmListFragment.alarmRecyclerViewAdapter.notifyDataSetChanged();
+        AlarmListFragment.alarmRecyclerViewAdapter.notifyItemInserted(alarmId -1);
+        String result = Persistence.storeListInSharedPreferences(
+                getApplicationContext(), AlarmData.ITEMS);
+        Log.i("alarmApp", "Stored  : " + result);
+
+        // Intent Extra which tells the Service which operation to carry out
+        alarmIntent.putExtra(EXTRA_ALARM_ON, true);
+        alarmIntent.putExtra(EXTRA_ALARM_TYPE, alarmType);
+        alarmIntent.putExtra(EXTRA_ALARM_NAME, alarmName);
+        alarmIntent.putExtra(EXTRA_ALARM_ID, alarmId);
 
         pendingAlarmIntent = PendingIntent.getBroadcast(MainActivity.this,
                     alarmItem.id, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -128,4 +140,5 @@ public class MainActivity extends AppCompatActivity
         Log.i("alarmApp", "List item interaction");
         Log.i("alarmApp", item.toString());
     }
+
 }
