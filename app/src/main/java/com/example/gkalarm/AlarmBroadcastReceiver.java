@@ -17,6 +17,8 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 intent.getExtras().getBoolean(MainActivity.EXTRA_ALARM_ON));
         serviceIntent.putExtra(MainActivity.EXTRA_ALARM_TYPE,
                 intent.getExtras().getInt(MainActivity.EXTRA_ALARM_TYPE));
+        serviceIntent.putExtra(MainActivity.EXTRA_ALARM_NAME,
+                intent.getExtras().getInt(MainActivity.EXTRA_ALARM_NAME));
 
         // Start AlarmToneService
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

@@ -41,7 +41,7 @@ public class TimeSelectFragment extends DialogFragment implements AdapterView.On
     public static final int ALARM_SCHOOL_BELL = 3;
 
     EditText etAlarmName;
-    Button doneButton;
+    Button doneButton, cancelButton;
     TimePicker timePicker;
     OnTimeSelectedListener listener;
     Spinner spinner;
@@ -64,6 +64,7 @@ public class TimeSelectFragment extends DialogFragment implements AdapterView.On
 
         etAlarmName = view.findViewById(R.id.et_alarm_name);
         doneButton = view.findViewById(R.id.set_alarm_button);
+        cancelButton = view.findViewById(R.id.cancel_set_alarm_button);
         timePicker = view.findViewById(R.id.time_picker);
         spinner = view.findViewById(R.id.tone_spinner);
         alarmType = ALARM_ALIEN;
@@ -95,6 +96,13 @@ public class TimeSelectFragment extends DialogFragment implements AdapterView.On
                 // Notify the listener
                 listener.onTimePicked(hour, minute, alarmType, etAlarmName.getText().toString());
                 dismiss();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDialog().dismiss();
             }
         });
 
@@ -137,7 +145,7 @@ public class TimeSelectFragment extends DialogFragment implements AdapterView.On
                 alarmType = ALARM_WATCH;
                 break;
         }
-        Log.i("alarmApp", "Item selected - position : " + alarmType);
+        Log.i("alarmApp", "Tone selected - position : " + alarmType);
     }
 
     @Override

@@ -15,6 +15,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import static com.example.gkalarm.MainActivity.EXTRA_ALARM_NAME;
 import static com.example.gkalarm.MainActivity.EXTRA_ALARM_ON;
 import static com.example.gkalarm.MainActivity.EXTRA_ALARM_TYPE;
 import static com.example.gkalarm.TimeSelectFragment.ALARM_ALIEN;
@@ -58,6 +59,8 @@ public class AlarmToneService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        String alarmName = intent.getExtras().getString(EXTRA_ALARM_NAME);
+
         // Tapping the notification will open the QuestionActivity.
         questionActivityIntent = new Intent(this, QuestionActivity.class);
         pendingNotificationIntent = getPendingIntentWithBackStack(questionActivityIntent);
@@ -67,7 +70,7 @@ public class AlarmToneService extends Service {
 
         notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Alarm Running! answer the question")
+                .setContentTitle("Alarm! - " + alarmName + " click to answer the question")
                 // Set the intent that will fire when the user taps the notification
                 .setContentInfo("Doing stuff in the background...")
                 .setSmallIcon(R.mipmap.ic_launcher)

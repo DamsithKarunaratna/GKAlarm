@@ -85,16 +85,6 @@ public class MainActivity extends AppCompatActivity
         alarmIntent.putExtra(EXTRA_ALARM_TYPE, alarmType);
         alarmIntent.putExtra(EXTRA_ALARM_NAME, alarmName);
 
-        pendingAlarmIntent = PendingIntent.getBroadcast(MainActivity.this,
-                    0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmMgr.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() - 30000, pendingAlarmIntent);
-        } else {
-            alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingAlarmIntent);
-        }
-
-        // id time name mili
         AlarmData.AlarmItem alarmItem = new AlarmData.AlarmItem(
                 AlarmData.ITEMS.size() + 1,
                 timeString,
@@ -103,6 +93,16 @@ public class MainActivity extends AppCompatActivity
 
         AlarmData.addItem(alarmItem);
         AlarmListFragment.alarmRecyclerViewAdapter.notifyDataSetChanged();
+
+        pendingAlarmIntent = PendingIntent.getBroadcast(MainActivity.this,
+                    alarmItem.id, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            alarmMgr.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() - 30000, pendingAlarmIntent);
+        } else {
+            alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingAlarmIntent);
+        }
+
     }
 
     /**
