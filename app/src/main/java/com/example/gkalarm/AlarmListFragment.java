@@ -105,5 +105,6 @@ public class AlarmListFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(AlarmItem item);
+        void onDeleteClicked(AlarmItem item);
     }
 }

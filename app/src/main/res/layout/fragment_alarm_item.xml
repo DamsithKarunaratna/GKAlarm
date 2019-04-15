@@ -12,21 +12,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
         android:padding="12dp">
 
         <TextView
             android:id="@+id/tv_alarm_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:text="1"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:textSize="20sp"
-            android:textColor="@color/colorSecondaryText"/>
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tv_alarm_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:text="06:00"
             android:layout_marginStart="17dp"
             android:layout_marginLeft="17dp"
@@ -40,6 +43,7 @@
             android:id="@+id/tv_alarm_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginStart="17dp"
             android:layout_marginLeft="17dp"
             android:layout_toEndOf="@+id/tv_alarm_time"
@@ -47,6 +51,15 @@
             android:text="Get Up!"
             android:textSize="20sp"
             android:textAppearance="?attr/textAppearanceListItem" />
+
+        <ImageView
+            android:id="@+id/image_delete"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_delete_black_24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
 
     </RelativeLayout>
 

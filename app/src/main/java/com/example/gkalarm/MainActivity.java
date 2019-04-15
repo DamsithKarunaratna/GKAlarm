@@ -141,4 +141,20 @@ public class MainActivity extends AppCompatActivity
         Log.i("alarmApp", item.toString());
     }
 
+    @Override
+    public void onDeleteClicked(AlarmData.AlarmItem item) {
+
+        alarmIntent = new Intent(this, AlarmBroadcastReceiver.class);
+        pendingAlarmIntent = PendingIntent.getBroadcast(this,
+                item.id, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        pendingAlarmIntent.cancel();
+        alarmMgr.cancel(pendingAlarmIntent);
+        alarmIntent.putExtra(MainActivity.EXTRA_ALARM_ON, false);
+        sendBroadcast(alarmIntent);
+        AlarmData.ITEMS.remove(item.id - 1);
+        AlarmListFragment.alarmRecyclerViewAdapter.notifyItemRemoved(item.id - 1);
+
+    }
+
 }
