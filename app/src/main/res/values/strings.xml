@@ -8,6 +8,8 @@
     <string name="channel_name">com.example.gkalarm.channel</string>
     <string name="channel_description">notification channel for gkalarm</string>
     <string name="tone">Tone :</string>
+    <string name="question_description_text">Answer the Question below to stop the alarm!</string>
+    <string name="question_off_btn_text">Turn off alarm</string>
 
     <string-array name="tones_array">
         <item>alien siren</item>

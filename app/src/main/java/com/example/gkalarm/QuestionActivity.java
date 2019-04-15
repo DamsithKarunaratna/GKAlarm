@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.gkalarm.data.AlarmData;
 import com.example.gkalarm.data.Persistence;
+import com.example.gkalarm.data.QuestionData;
 
 import java.util.Iterator;
 
@@ -22,18 +23,21 @@ public class QuestionActivity extends AppCompatActivity {
     Button alarmOffButton;
     TextView tvQuestion;
     AlarmManager alarmMgr;
+    QuestionData.Question questionModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
 
+        questionModel = QuestionData.getRandomQuestion();
+
         alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
         String alarmName = getIntent().getExtras().getString(MainActivity.EXTRA_ALARM_NAME);
         final int alarmId = getIntent().getExtras().getInt(MainActivity.EXTRA_ALARM_ID);
 
         tvQuestion = findViewById(R.id.tv_question);
-        tvQuestion.setText(alarmName + " : " + alarmId);
+        tvQuestion.setText(questionModel.getQuestion());
 
         alarmIntent = new Intent(this, AlarmBroadcastReceiver.class);
         pendingAlarmIntent = PendingIntent.getBroadcast(this,
