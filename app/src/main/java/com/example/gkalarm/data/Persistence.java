@@ -70,7 +70,7 @@ public class Persistence {
         editor = sharedPreferences.edit();
         editor.remove(KEY_ALARM_ARRAY).commit();
         editor.putString(KEY_ALARM_ARRAY, json);
-        editor.commit();
+        editor.apply();
 
         return json;
     }

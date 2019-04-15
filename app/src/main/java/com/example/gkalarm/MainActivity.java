@@ -5,19 +5,31 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.gkalarm.data.AlarmData;
 import com.example.gkalarm.data.Persistence;
+import static com.example.gkalarm.AlarmToneService.MSG_REPLY;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity
         implements TimeSelectFragment.OnTimeSelectedListener,
@@ -31,6 +43,85 @@ public class MainActivity extends AppCompatActivity
     AlarmManager alarmMgr;
     Intent alarmIntent;
     PendingIntent pendingAlarmIntent;
+    static int listPosition;
+
+    /** Messenger for communicating with the service. */
+    Messenger mService = null;
+    /** Target we publish for Service to send messages to MainActivity.*/
+    Messenger mainActivityMessenger = null;
+    /** Flag indicating whether we have called bind on the service. */
+    boolean bound;
+
+    /**
+     * Handler of incoming messages from clients.
+     */
+    class ServiceMessageHandler extends Handler {
+        Context context;
+
+        ServiceMessageHandler (Context context) {
+            context = context.getApplicationContext();
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_REPLY:
+                    handleServiceReply(msg);
+
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+
+        private void handleServiceReply(Message msg) {
+            Log.i("alarmApp", "Handling reply from service");
+
+            Bundle msgData = msg.getData();
+            if(!msgData.getBoolean("isPlaying")) {
+                pendingAlarmIntent.cancel();
+                alarmMgr.cancel(pendingAlarmIntent);
+
+                for (Iterator<AlarmData.AlarmItem> iterator = AlarmData.ITEMS.iterator();
+                     iterator.hasNext(); ) {
+                    AlarmData.AlarmItem i = iterator.next();
+                    if (listPosition == i.id) {
+                        AlarmData.ITEMS.remove(i);
+                        Log.i("alarmApp", "Removed : " + listPosition);
+                        AlarmListFragment.alarmRecyclerViewAdapter.notifyDataSetChanged();
+                        String result = Persistence.storeListInSharedPreferences(
+                                getApplicationContext(), AlarmData.ITEMS);
+                        Log.i("alarmApp", "Stored  : " + result);
+                    }
+                }
+
+            } else {
+                Toast.makeText(MainActivity.this, "Cannot delete, while alarm is playing, Please answer the question", Toast.LENGTH_LONG).show();
+            }
+
+        }
+    }
+
+    /**
+     * Class for interacting with the main interface of the service.
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // This is called when the connection with the service has been
+            // established, giving us the object we can use to
+            // interact with the service.  We are communicating with the
+            // service using a Messenger, so here we get a client-side
+            // representation of that from the raw IBinder object.
+            mService = new Messenger(service);
+            bound = true;
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            // This is called when the connection with the service has been
+            // unexpectedly disconnected -- that is, its process crashed.
+            mService = null;
+            bound = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +129,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mainActivityMessenger = new Messenger(new ServiceMessageHandler (this));
 
         alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
         // Create a pending intent for the BroadcastReceiver
@@ -50,6 +142,14 @@ public class MainActivity extends AppCompatActivity
         AlarmListFragment.alarmRecyclerViewAdapter.notifyDataSetChanged();
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to the service
+        bindService(new Intent(this, AlarmToneService.class), mConnection,
+                Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -79,9 +179,12 @@ public class MainActivity extends AppCompatActivity
     public void onTimePicked(int hour, int minute, int alarmType, String alarmName) {
 
         Log.i("alarmApp", "ONTIMEPICKED() called");
-
+        int alarmId = 0;
+        if(!AlarmData.ITEMS.isEmpty()) {
+            alarmId = AlarmData.ITEMS.get(AlarmData.ITEMS.size() -1).id + 1;
+        }
         String timeString = hour + ":" + minute;
-        int alarmId = AlarmData.ITEMS.size() + 1;
+
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -95,7 +198,8 @@ public class MainActivity extends AppCompatActivity
                 calendar.getTimeInMillis());
 
         AlarmData.addItem(alarmItem);
-        AlarmListFragment.alarmRecyclerViewAdapter.notifyItemInserted(alarmId -1);
+        AlarmListFragment.alarmRecyclerViewAdapter.notifyItemInserted(
+                AlarmListFragment.alarmRecyclerViewAdapter.getItemCount() - 1);
         String result = Persistence.storeListInSharedPreferences(
                 getApplicationContext(), AlarmData.ITEMS);
         Log.i("alarmApp", "Stored  : " + result);
@@ -136,24 +240,50 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onListFragmentInteraction(AlarmData.AlarmItem item) {
+    public void onListFragmentInteraction(int position) {
         Log.i("alarmApp", "List item interaction");
-        Log.i("alarmApp", item.toString());
+        Log.i("alarmApp", String.valueOf(position));
+    }
+
+    public void serviceSayHello() {
+
+        if (!bound) return;
+        // Create and send a message to the service, using a supported 'what' value
+        Message msg = Message.obtain(null, AlarmToneService.MSG_SAY_HELLO, 0, 0);
+        msg.replyTo = mainActivityMessenger;
+        try {
+            mService.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void safeDeleteAlarm() {
+
+        if (!bound) {
+            return;
+        }
+        // Create and send a message to the service, using a supported 'what' value
+        Message msg = Message.obtain(null, AlarmToneService.MSG_REPLY, 0, 0);
+        msg.replyTo = mainActivityMessenger;
+        try {
+            mService.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
-    public void onDeleteClicked(AlarmData.AlarmItem item) {
+    public void onDeleteClicked(AlarmData.AlarmItem item, int position) {
 
+        listPosition = position;
         alarmIntent = new Intent(this, AlarmBroadcastReceiver.class);
         pendingAlarmIntent = PendingIntent.getBroadcast(this,
                 item.id, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        pendingAlarmIntent.cancel();
-        alarmMgr.cancel(pendingAlarmIntent);
-        alarmIntent.putExtra(MainActivity.EXTRA_ALARM_ON, false);
-        sendBroadcast(alarmIntent);
-        AlarmData.ITEMS.remove(item.id - 1);
-        AlarmListFragment.alarmRecyclerViewAdapter.notifyItemRemoved(item.id - 1);
+        safeDeleteAlarm();
 
     }
 

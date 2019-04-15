@@ -5,11 +5,15 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.gkalarm.data.AlarmData;
+import com.example.gkalarm.data.Persistence;
+
+import java.util.Iterator;
 
 public class QuestionActivity extends AppCompatActivity {
 
@@ -40,12 +44,25 @@ public class QuestionActivity extends AppCompatActivity {
         alarmOffButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 pendingAlarmIntent.cancel();
                 alarmMgr.cancel(pendingAlarmIntent);
                 alarmIntent.putExtra(MainActivity.EXTRA_ALARM_ON, false);
                 sendBroadcast(alarmIntent);
-                AlarmData.ITEMS.remove(alarmId - 1);
-                AlarmListFragment.alarmRecyclerViewAdapter.notifyItemRemoved(alarmId - 1);
+
+                for (Iterator<AlarmData.AlarmItem> iterator =
+                     AlarmData.ITEMS.iterator(); iterator.hasNext(); ) {
+                    AlarmData.AlarmItem i = iterator.next();
+                    if (alarmId == i.id) {
+                        AlarmData.ITEMS.remove(i);
+                        Log.i("alarmApp", "Removed : " + alarmId);
+                        AlarmListFragment.alarmRecyclerViewAdapter.notifyDataSetChanged();
+                        String result = Persistence.storeListInSharedPreferences(
+                                getApplicationContext(), AlarmData.ITEMS);
+                        Log.i("alarmApp", "Stored  : " + result);
+                    }
+                }
+
                 finish();
             }
         });

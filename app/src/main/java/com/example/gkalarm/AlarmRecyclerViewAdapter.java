@@ -34,9 +34,9 @@ public class AlarmRecyclerViewAdapter extends RecyclerView.Adapter<AlarmRecycler
     }
 
     @Override
-    public void onBindViewHolder(final AlarmItemViewHolder holder, int position) {
+    public void onBindViewHolder(final AlarmItemViewHolder holder, final int position) {
 
-        AlarmItem currentItem = mValues.get(position);
+        final AlarmItem currentItem = mValues.get(position);
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(String.valueOf(currentItem.id));
         holder.mNameView.setText(currentItem.alarmName);
@@ -48,7 +48,7 @@ public class AlarmRecyclerViewAdapter extends RecyclerView.Adapter<AlarmRecycler
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onDeleteClicked(holder.mItem);
+                    mListener.onDeleteClicked(holder.mItem, currentItem.id);
                 }
             }
         });
@@ -59,7 +59,7 @@ public class AlarmRecyclerViewAdapter extends RecyclerView.Adapter<AlarmRecycler
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onListFragmentInteraction(position);
                 }
             }
         });

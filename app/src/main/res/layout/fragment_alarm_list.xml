@@ -11,4 +11,4 @@
     app:layoutManager="LinearLayoutManager"
     tools:context=".AlarmListFragment"
     tools:listitem="@layout/fragment_alarm_item"
-    android:background="@android:color/darker_gray"/>
+    android:background="#65D1FC"/>
