@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Helper class for providing sample alarmTime for user interfaces created by
@@ -15,8 +16,9 @@ public class AlarmData {
 
     /**
      * Array of items to be stored in memory.
+     * Used CopyOnWriteArrayList to make it thread safe
      */
-    public static final List<AlarmItem> ITEMS = new ArrayList<AlarmItem>();
+    public static final CopyOnWriteArrayList<AlarmItem> ITEMS = new CopyOnWriteArrayList<>();
 
     public static void addItem(AlarmItem item) {
         ITEMS.add(item);

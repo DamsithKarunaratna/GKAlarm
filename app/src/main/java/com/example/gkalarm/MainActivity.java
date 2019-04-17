@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.gkalarm.data.AlarmData;
 import com.example.gkalarm.data.Persistence;
+
 import static com.example.gkalarm.AlarmToneService.MSG_REPLY;
 
 import java.util.Calendar;
@@ -45,11 +46,17 @@ public class MainActivity extends AppCompatActivity
     PendingIntent pendingAlarmIntent;
     static int listPosition;
 
-    /** Messenger for communicating with the service. */
+    /**
+     * Messenger for communicating with the service.
+     */
     Messenger mService = null;
-    /** Target we publish for Service to send messages to MainActivity.*/
+    /**
+     * Target we publish for Service to send messages to MainActivity.
+     */
     Messenger mainActivityMessenger = null;
-    /** Flag indicating whether we have called bind on the service. */
+    /**
+     * Flag indicating whether we have called bind on the service.
+     */
     boolean bound;
 
     /**
@@ -58,7 +65,7 @@ public class MainActivity extends AppCompatActivity
     class ServiceMessageHandler extends Handler {
         Context context;
 
-        ServiceMessageHandler (Context context) {
+        ServiceMessageHandler(Context context) {
             context = context.getApplicationContext();
         }
 
@@ -77,7 +84,7 @@ public class MainActivity extends AppCompatActivity
             Log.i("alarmApp", "Handling reply from service");
 
             Bundle msgData = msg.getData();
-            if(!msgData.getBoolean("isPlaying")) {
+            if (!msgData.getBoolean("isPlaying")) {
                 pendingAlarmIntent.cancel();
                 alarmMgr.cancel(pendingAlarmIntent);
 
@@ -93,6 +100,7 @@ public class MainActivity extends AppCompatActivity
                         Log.i("alarmApp", "Stored  : " + result);
                     }
                 }
+
 
             } else {
                 Toast.makeText(MainActivity.this, "Cannot delete, while alarm is playing, Please answer the question", Toast.LENGTH_LONG).show();
@@ -129,7 +137,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mainActivityMessenger = new Messenger(new ServiceMessageHandler (this));
+        mainActivityMessenger = new Messenger(new ServiceMessageHandler(this));
 
         alarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
         // Create a pending intent for the BroadcastReceiver
@@ -180,8 +188,8 @@ public class MainActivity extends AppCompatActivity
 
         Log.i("alarmApp", "ONTIMEPICKED() called");
         int alarmId = 0;
-        if(!AlarmData.ITEMS.isEmpty()) {
-            alarmId = AlarmData.ITEMS.get(AlarmData.ITEMS.size() -1).id + 1;
+        if (!AlarmData.ITEMS.isEmpty()) {
+            alarmId = AlarmData.ITEMS.get(AlarmData.ITEMS.size() - 1).id + 1;
         }
         String timeString = hour + ":" + minute;
 
@@ -211,7 +219,7 @@ public class MainActivity extends AppCompatActivity
         alarmIntent.putExtra(EXTRA_ALARM_ID, alarmId);
 
         pendingAlarmIntent = PendingIntent.getBroadcast(MainActivity.this,
-                    alarmItem.id, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmItem.id, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             alarmMgr.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() - 30000, pendingAlarmIntent);
@@ -223,7 +231,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Show a custom DialogFragment with a TimePicker, EditText for alarm name and Tone selector
-     *
+     * <p>
      * See <a href=
      * "https://medium.com/@xabaras/creating-a-custom-dialog-with-dialogfragment-f0198dab656d"
      * >Creating A Custom Dialog With DialogFragment</a> for more information.
