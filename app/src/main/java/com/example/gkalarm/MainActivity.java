@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity
      * Handler of incoming messages from clients.
      */
     class ServiceMessageHandler extends Handler {
+
         Context context;
 
         ServiceMessageHandler(Context context) {
