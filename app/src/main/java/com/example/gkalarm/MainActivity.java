@@ -185,13 +185,25 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onTimePicked(int hour, int minute, int alarmType, String alarmName) {
 
+        String timeString = "";
+
         Log.i("alarmApp", "ONTIMEPICKED() called");
         int alarmId = 0;
         if (!AlarmData.ITEMS.isEmpty()) {
             alarmId = AlarmData.ITEMS.get(AlarmData.ITEMS.size() - 1).id + 1;
         }
-        String timeString = hour + ":" + minute;
 
+        if(hour < 10) {
+            timeString += "0" + hour + ":";
+        } else {
+            timeString += hour + ":";
+        }
+
+        if(minute < 10) {
+            timeString += "0" + minute;
+        } else {
+            timeString += minute;
+        }
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -250,20 +262,6 @@ public class MainActivity extends AppCompatActivity
     public void onListFragmentInteraction(int position) {
         Log.i("alarmApp", "List item interaction");
         Log.i("alarmApp", String.valueOf(position));
-    }
-
-    public void serviceSayHello() {
-
-        if (!bound) return;
-        // Create and send a message to the service, using a supported 'what' value
-        Message msg = Message.obtain(null, AlarmToneService.MSG_SAY_HELLO, 0, 0);
-        msg.replyTo = mainActivityMessenger;
-        try {
-            mService.send(msg);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public void safeDeleteAlarm() {
