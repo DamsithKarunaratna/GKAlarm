@@ -3,7 +3,6 @@ package com.example.gkalarm;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +19,13 @@ import com.example.gkalarm.data.QuestionData;
 
 import java.util.Iterator;
 
+/**
+ * @author Damsith Karunaratna
+ *
+ * Activity for answering general knowledge question and stopping the alarm
+ *
+ *
+ */
 public class QuestionActivity extends AppCompatActivity {
 
     Intent alarmIntent;
@@ -85,7 +91,7 @@ public class QuestionActivity extends AppCompatActivity {
         RadioButton rbSelected = findViewById(rbGroup.getCheckedRadioButtonId());
         int selectedAnswer = rbGroup.indexOfChild(rbSelected) + 1;
 
-        if (selectedAnswer == questionModel.getAnswr()) {
+        if (selectedAnswer == questionModel.getAnswer()) {
             Toast.makeText(this, "Correct answer", Toast.LENGTH_SHORT).show();
             stopAlarm();
         } else {

@@ -13,6 +13,9 @@ import com.example.gkalarm.data.AlarmData.AlarmItem;
 import java.util.List;
 
 /**
+ * @author Damsith Karunaratna
+ * IDE generated ViewAdapter slightly modified to accommodate onDeleteClicked listener
+ *
  * {@link RecyclerView.Adapter} that can display a {@link AlarmItem} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  */

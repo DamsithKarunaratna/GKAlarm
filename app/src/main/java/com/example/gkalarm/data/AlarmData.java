@@ -7,10 +7,9 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Helper class for providing sample alarmTime for user interfaces created by
- * Android template wizards.
- * <p>
- * TODO: Replace all uses of this class before publishing your app.
+ * @author Damsith Karunaratna
+ * Helper class for providing temporary storage for alarmItems for user interfaces
+ *
  */
 public class AlarmData {
 

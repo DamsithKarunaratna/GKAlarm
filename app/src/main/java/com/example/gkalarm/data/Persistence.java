@@ -14,50 +14,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * @author Damsith Karunaratna
+ *
  * Persistence for arrays in shared preferences
  * See <a href="https://stackoverflow.com/a/7361989">SO answer</a>
  */
 public class Persistence {
 
-    public static final String KEY_ALARM_ARRAY = "com.example.gkalarm.data.KEY_ALARM_ARRAY";
-    public static final String SHARED_PREF_FILE = "com.example.gkalarm.data.SHARED_PREF_FILE";
+    private static final String KEY_ALARM_ARRAY = "com.example.gkalarm.data.KEY_ALARM_ARRAY";
+    private static final String SHARED_PREF_FILE = "com.example.gkalarm.data.SHARED_PREF_FILE";
 
     public Persistence() {
     }
 
-    public static void setStringArrayPref(Context context, String key, ArrayList<String> values) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        JSONArray a = new JSONArray();
-        for (int i = 0; i < values.size(); i++) {
-            a.put(values.get(i));
-        }
-        if (!values.isEmpty()) {
-            editor.putString(key, a.toString());
-        } else {
-            editor.putString(key, null);
-        }
-        editor.commit();
-    }
-
-    public static ArrayList<String> getStringArrayPref(Context context, String key) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String json = prefs.getString(key, null);
-        ArrayList<String> urls = new ArrayList<String>();
-        if (json != null) {
-            try {
-                JSONArray a = new JSONArray(json);
-                for (int i = 0; i < a.length(); i++) {
-                    String url = a.optString(i);
-                    urls.add(url);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return urls;
-    }
-
+    /**
+     * Method to convert ArrayList to json string and store in shared preferences
+     *
+     * @param context context to get shared prefs
+     * @param list list to be stored
+     * @return Gson parsed list of values
+     */
     public static String storeListInSharedPreferences(Context context, List<AlarmData.AlarmItem> list) {
 
         SharedPreferences sharedPreferences;
@@ -75,6 +51,12 @@ public class Persistence {
         return json;
     }
 
+    /**
+     * Method to convert stored json string into an ArrayList
+     *
+     * @param context to get shared preferences
+     * @return
+     */
     public static ArrayList<AlarmData.AlarmItem> getListFromSharedPreferences(Context context) {
 
         SharedPreferences sharedPreferences;
@@ -82,9 +64,8 @@ public class Persistence {
 
         Gson gson = new Gson();
         String response=sharedPreferences.getString(KEY_ALARM_ARRAY , "");
-        ArrayList<AlarmData.AlarmItem> alarmItemArrayList = gson.fromJson(response,
-                new TypeToken<List<AlarmData.AlarmItem>>(){}.getType());
 
-        return alarmItemArrayList;
+        return gson.fromJson(response,
+                new TypeToken<List<AlarmData.AlarmItem>>(){}.getType());
     }
 }

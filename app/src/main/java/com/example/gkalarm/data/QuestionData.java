@@ -4,10 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Class to create and store a list of questions at runtime so that a random question can be selected
+ *
+ */
 public class QuestionData {
 
     private static List<Question> questionsList = new ArrayList<>();
 
+    /**
+     * @return a random Question from the list
+     */
     public static Question getRandomQuestion() {
         Random rand = new Random();
         return questionsList.get(rand.nextInt(questionsList.size()));
@@ -60,6 +67,9 @@ public class QuestionData {
 
     }
 
+    /**
+     * Data Model for each question
+     */
     public static class Question {
         private String question;
         private String option1;
@@ -67,16 +77,16 @@ public class QuestionData {
         private String option3;
         private String option4;
 
-        private int answr;
+        private int answer;
 
         public Question(String question,
-                            String option1, String option2, String option3, String option4, int answr) {
+                            String option1, String option2, String option3, String option4, int answer) {
             this.question = question;
             this.option1 = option1;
             this.option2 = option2;
             this.option3 = option3;
             this.option4 = option4;
-            this.answr = answr;
+            this.answer = answer;
         }
 
         public Question() {
@@ -122,12 +132,12 @@ public class QuestionData {
             this.option4 = option4;
         }
 
-        public int getAnswr() {
-            return answr;
+        public int getAnswer() {
+            return answer;
         }
 
-        public void setAnswr(int answr) {
-            this.answr = answr;
+        public void setAnswer(int answer) {
+            this.answer = answer;
         }
     }
 }

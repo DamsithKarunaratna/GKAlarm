@@ -49,7 +49,6 @@ import static com.example.gkalarm.TimeSelectFragment.ALARM_WATCH;
  */
 public class AlarmToneService extends Service {
 
-    // https://developer.android.com/guide/components/bound-services.html
     /**
      * Commands to the service
      */
@@ -121,24 +120,28 @@ public class AlarmToneService extends Service {
             switch (alarmType) {
                 case ALARM_ALIEN:
                     mediaPlayer = MediaPlayer.create(this, R.raw.alien_siren);
+                    mediaPlayer.setLooping(true);
                     isPlaying = true;
                     break;
                 case ALARM_BOMB_SIREN:
                     mediaPlayer = MediaPlayer.create(this, R.raw.bomb_siren);
+                    mediaPlayer.setLooping(true);
                     isPlaying = true;
                     break;
                 case ALARM_SCHOOL_BELL:
                     mediaPlayer = MediaPlayer.create(this, R.raw.old_fashioned_school_bell);
+                    mediaPlayer.setLooping(true);
                     isPlaying = true;
                     break;
                 case ALARM_WATCH:
                     mediaPlayer = MediaPlayer.create(this, R.raw.analog_watch_alarm);
+                    mediaPlayer.setLooping(true);
                     isPlaying = true;
                     break;
             }
             mediaPlayer.start();
             Toast.makeText(this, "Check notification", Toast.LENGTH_SHORT).show();
-            Log.i("alarmApp", "Received intent - Alarm On : " + alarmOn);
+            Log.i("alarmApp", "Received intent - Alarm On : Starting media playback");
 
         } else {
             isPlaying = false;
@@ -146,7 +149,7 @@ public class AlarmToneService extends Service {
                 mediaPlayer.stop();
                 mediaPlayer.reset();
             }
-            Log.i("alarmApp", "Received intent - Alarm Off : " + alarmOn);
+            Log.i("alarmApp", "Received intent - Alarm Off : Stopping media playback");
             stopForeground(true);
         }
 
@@ -177,7 +180,7 @@ public class AlarmToneService extends Service {
      * Handler of incoming messages from clients.
      */
     static class IncomingHandler extends Handler {
-        private Context applicationContext;
+        private Context applicationContext; // unused.. consider removing
 
         IncomingHandler(Context context) {
             applicationContext = context.getApplicationContext();

@@ -14,8 +14,11 @@ import com.example.gkalarm.data.AlarmData;
 import com.example.gkalarm.data.AlarmData.AlarmItem;
 
 /**
+ * @author Damsith Karunaratna
+ *
+ * IDE generted class slightly modified to handle 'delete item' events
  * A fragment representing a list of Items.
- * <p/>
+ *
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */

@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
+/**
+ * Receives broadcasts from the AlarmManager and starts the ringtone service
+ */
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
 

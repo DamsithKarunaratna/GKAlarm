@@ -29,7 +29,6 @@ import com.example.gkalarm.data.Persistence;
 import static com.example.gkalarm.AlarmToneService.MSG_REPLY;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity
