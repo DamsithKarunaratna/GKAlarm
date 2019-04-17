@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 
 /**
@@ -84,18 +85,23 @@ public class TimeSelectFragment extends DialogFragment implements AdapterView.On
 
                 int hour, minute;
 
-                // Check for  build version before running deprecated methods
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    hour = timePicker.getHour();
-                    minute = timePicker.getMinute();
+                if(etAlarmName.getText().toString().matches("")) {
+                    Toast.makeText(v.getContext(), "Provide an alarm name!", Toast.LENGTH_SHORT).show();
                 } else {
-                    hour = timePicker.getCurrentHour();
-                    minute = timePicker.getCurrentMinute();
+                    // Check for  build version before running deprecated methods
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        hour = timePicker.getHour();
+                        minute = timePicker.getMinute();
+                    } else {
+                        hour = timePicker.getCurrentHour();
+                        minute = timePicker.getCurrentMinute();
+                    }
+
+                    // Notify the listener
+                    listener.onTimePicked(hour, minute, alarmType, etAlarmName.getText().toString());
+                    dismiss();
                 }
 
-                // Notify the listener
-                listener.onTimePicked(hour, minute, alarmType, etAlarmName.getText().toString());
-                dismiss();
             }
         });
 
